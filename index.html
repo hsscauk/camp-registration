@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Camp Registration Form</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@400;600&family=Source+Sans+3:wght@300;400;600&display=swap');
+  :root {
+    --ink:          #1c1c2e;
+    --mid:          #5a5a78;
+    --line:         #d0d0e0;
+    --bg:           #f5f5f9;
+    --white:        #ffffff;
+    --accent:       #2e5fa3;
+    --accent-light: #eaf0fa;
+    --submit-col:   #1a6b4a;
+    --pdf-col:      #8b3a00;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Source Sans 3', sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    min-height: 100vh;
+    padding: 0 0 48px 0;
+  }
+  .page-header {
+    background: var(--accent);
+    color: white;
+    padding: 20px 22px 18px;
+  }
+  .page-header h1 {
+    font-family: 'Source Serif 4', serif;
+    font-size: 21px;
+    font-weight: 600;
+  }
+  .page-header p { font-size: 13px; opacity: 0.8; margin-top: 4px; }
+  .form-card {
+    max-width: 640px;
+    margin: 24px auto 0;
+    background: var(--white);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    box-shadow: 0 3px 16px rgba(0,0,0,0.07);
+    overflow: hidden;
+    padding-bottom: 28px;
+  }
+  .section-title {
+    background: var(--accent-light);
+    color: var(--accent);
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    padding: 9px 20px;
+    border-top: 1px solid var(--line);
+  }
+  .section-title:first-child { border-top: none; }
+  .fields { padding: 18px 20px 4px; display: flex; flex-direction: column; gap: 16px; }
+  .field { display: flex; flex-direction: column; gap: 5px; }
+  .field label {
+    font-size: 11.5px; font-weight: 600;
+    color: var(--mid);
+    text-transform: uppercase; letter-spacing: 0.06em;
+  }
+  .field input[type="text"],
+  .field textarea,
+  .field select {
+    width: 100%;
+    padding: 11px 13px;
+    border: 1.5px solid var(--line);
+    border-radius: 4px;
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 16px;
+    color: var(--ink);
+    background: var(--white);
+    outline: none;
+    -webkit-appearance: none;
+    appearance: none;
+    transition: border-color 0.15s, background 0.15s;
+  }
+  .field input:focus,
+  .field textarea:focus,
+  .field select:focus { border-color: var(--accent); background: #f0f5ff; }
+  .field textarea { resize: vertical; min-height: 68px; }
+  .select-wrap { position: relative; }
+  .select-wrap::after {
+    content: '\25BE';
+    position: absolute; right: 13px; top: 50%;
+    transform: translateY(-50%);
+    color: var(--mid); font-size: 14px; pointer-events: none;
+  }
+  .day-checks {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px 20px;
+    padding: 4px 20px 16px;
+  }
+  .day-check {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    font-size: 16px;
+    color: var(--ink);
+    cursor: pointer;
+    min-width: 120px;
+  }
+  .day-check input[type="checkbox"] {
+    width: 22px; height: 22px;
+    accent-color: var(--accent);
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+  .meal-note { font-size: 12.5px; color: var(--mid); padding: 2px 20px 8px; }
+  .meal-grid {
+    margin: 0 20px;
+    border: 1.5px solid var(--line);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  .mgr {
+    display: grid;
+    grid-template-columns: 100px repeat(5, 1fr);
+  }
+  .mgr + .mgr { border-top: 1px solid var(--line); }
+  .mgh { background: var(--accent-light); }
+  .mgh .mg-cell {
+    font-size: 11px; font-weight: 600;
+    color: var(--accent);
+    text-transform: uppercase; letter-spacing: 0.06em;
+    text-align: center; padding: 8px 4px;
+  }
+  .mgh .mg-cell:first-child { text-align: left; padding-left: 14px; }
+  .mgd { background: var(--white); }
+  .mgd:nth-child(even) { background: #fafafe; }
+  .mg-cell { display: flex; align-items: center; justify-content: center; }
+  .mg-cell + .mg-cell { border-left: 1px solid var(--line); }
+  .mg-cell:first-child { justify-content: flex-start; padding-left: 14px; font-size: 13px; font-weight: 600; color: var(--mid); }
+  .mg-cell input[type="checkbox"] {
+    width: 22px; height: 22px;
+    accent-color: var(--accent);
+    cursor: pointer;
+  }
+  .mgd .mg-cell { padding: 11px 4px; }
+  .radio-group { display: flex; gap: 22px; flex-wrap: wrap; padding-top: 2px; }
+  .radio-group label {
+    display: flex; align-items: center; gap: 8px;
+    font-size: 16px; font-weight: 400;
+    color: var(--ink); cursor: pointer;
+    text-transform: none; letter-spacing: 0;
+  }
+  .radio-group input[type="radio"] {
+    width: 20px; height: 20px;
+    accent-color: var(--accent);
+  }
+  .actions {
+    max-width: 640px;
+    margin: 18px auto 0;
+    padding: 0 0;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .btn {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 15px 20px;
+    border-radius: 6px;
+    border: none;
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    letter-spacing: 0.01em;
+    transition: opacity 0.15s, transform 0.1s;
+  }
+  .btn:active { transform: scale(0.98); }
+  .btn:hover { opacity: 0.88; }
+  .btn-submit { background: var(--submit-col); color: white; }
+  .btn-pdf    { background: var(--pdf-col);    color: white; }
+  .btn:disabled { opacity: 0.55; cursor: not-allowed; transform: none; }
+  .btn-hint {
+    font-size: 12px;
+    color: var(--mid);
+    text-align: center;
+    margin-top: -4px;
+  }
+  .banner {
+    max-width: 640px;
+    margin: 16px auto 0;
+    border-radius: 8px;
+    padding: 16px 20px;
+    font-size: 14px;
+    line-height: 1.6;
+    display: none;
+  }
+  .banner-success { background: #edfaf3; border: 1px solid #7ecfaa; color: #0e4d2e; }
+  .banner-error   { background: #fff3f3; border: 1px solid #f5a0a0; color: #6b1010; }
+  .banner strong  { display: block; margin-bottom: 4px; font-size: 15px; }
+  @media (max-width: 660px) {
+    .form-card, .actions, .banner { margin-left: 12px; margin-right: 12px; }
+  }
+  @media print {
+    @page { size: A4; margin: 15mm 13mm 13mm; }
+    body { background: white; padding: 0; font-size: 11pt; }
+    .page-header {
+      -webkit-print-color-adjust: exact; print-color-adjust: exact;
+      padding: 10pt 12pt 9pt; margin-bottom: 8pt;
+    }
+    .page-header h1 { font-size: 15pt; }
+    .page-header p  { font-size: 9.5pt; }
+    .actions, .banner { display: none !important; }
+    .form-card {
+      max-width: 100%; margin: 0;
+      border: none; border-radius: 0;
+      box-shadow: none; padding-bottom: 0;
+    }
+    .section-title {
+      -webkit-print-color-adjust: exact; print-color-adjust: exact;
+      font-size: 8pt; padding: 5pt 10pt; margin-top: 6pt;
+    }
+    .fields { padding: 7pt 10pt 2pt; gap: 9pt; }
+    .field label { font-size: 7.5pt; }
+    .field input[type="text"],
+    .field textarea,
+    .field select {
+      border: 1pt solid #bbb; padding: 5pt 7pt;
+      font-size: 10.5pt; background: white !important; border-radius: 2pt;
+    }
+    .field textarea { min-height: 36pt; }
+    .select-wrap::after { display: none; }
+    .meal-note { font-size: 8pt; padding: 1pt 10pt 5pt; }
+    .meal-grid { margin: 0 10pt; border: 1pt solid #bbb; border-radius: 2pt; }
+    .mgh { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .mgh .mg-cell { font-size: 7.5pt; padding: 4pt 2pt; }
+    .mgh .mg-cell:first-child { padding-left: 8pt; }
+    .mgd .mg-cell { padding: 7pt 2pt; }
+    .mg-cell:first-child { font-size: 8.5pt; padding-left: 8pt; }
+    .mg-cell + .mg-cell { border-left: 1pt solid #bbb; }
+    .mgr + .mgr { border-top: 1pt solid #bbb; }
+    .mg-cell input[type="checkbox"] { width: 13px; height: 13px; }
+    .day-checks { padding: 3pt 10pt 10pt; gap: 6pt 14pt; }
+    .day-check { font-size: 10.5pt; min-width: 90pt; gap: 6pt; }
+    .day-check input[type="checkbox"] { width: 13px; height: 13px; }
+    .radio-group label { font-size: 10.5pt; }
+    .radio-group { gap: 14pt; }
+  }
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <h1>Camp Registration Form</h1>
+  <p>Fill in the form and tap Submit. Your registration goes straight to the organiser.</p>
+</div>
+
+<div class="form-card">
+  <div class="section-title">Personal Details</div>
+  <div class="fields">
+    <div class="field">
+      <label for="f-name">Full Name</label>
+      <input type="text" id="f-name" placeholder="Your full name" autocomplete="name">
+    </div>
+  </div>
+
+  <div class="section-title" style="margin-top:16px;">Days I Can Attend</div>
+  <p class="meal-note">Tick all the days you will be attending</p>
+  <div class="day-checks">
+    <label class="day-check"><input type="checkbox" id="a-Mon">   Monday</label>
+    <label class="day-check"><input type="checkbox" id="a-Tues">  Tuesday</label>
+    <label class="day-check"><input type="checkbox" id="a-Wed">   Wednesday</label>
+    <label class="day-check"><input type="checkbox" id="a-Thurs"> Thursday</label>
+    <label class="day-check"><input type="checkbox" id="a-Fri">   Friday</label>
+  </div>
+
+  <div class="section-title" style="margin-top:16px;">Meals Required</div>
+  <p class="meal-note">Tick the meals you need on each day</p>
+  <div class="meal-grid">
+    <div class="mgr mgh">
+      <div class="mg-cell">Meal</div>
+      <div class="mg-cell">Mon</div>
+      <div class="mg-cell">Tues</div>
+      <div class="mg-cell">Wed</div>
+      <div class="mg-cell">Thurs</div>
+      <div class="mg-cell">Fri</div>
+    </div>
+    <div class="mgr mgd">
+      <div class="mg-cell">Breakfast</div>
+      <div class="mg-cell"><input type="checkbox" id="m-B-Mon"   aria-label="Breakfast Mon"></div>
+      <div class="mg-cell"><input type="checkbox" id="m-B-Tues"  aria-label="Breakfast Tues"></div>
+      <div class="mg-cell"><input type="checkbox" id="m-B-Wed"   aria-label="Breakfast Wed"></div>
+      <div class="mg-cell"><input type="checkbox" id="m-B-Thurs" aria-label="Breakfast Thurs"></div>
+      <div class="mg-cell"><input type="checkbox" id="m-B-Fri"   aria-label="Breakfast Fri"></div>
+    </div>
+    <div class="mgr mgd">
+      <div class="mg-cell">Lunch</div>
+      <div class="mg-cell"><input type="checkbox" id="m-L-Mon"   aria-label="Lunch Mon"></div>
+      <div class="mg-cell"><input type="checkbox" id="m-L-Tues"  aria-label="Lunch Tues"></div>
+      <div class="mg-cell"><input type="checkbox" id="m-L-Wed"   aria-label="Lunch Wed"></div>
+      <div class="mg-cell"><input type="checkbox" id="m-L-Thurs" aria-label="Lunch Thurs"></div>
+      <div class="mg-cell"><input type="checkbox" id="m-L-Fri"   aria-label="Lunch Fri"></div>
+    </div>
+    <div class="mgr mgd">
+      <div class="mg-cell">Dinner</div>
+      <div class="mg-cell"><input type="checkbox" id="m-D-Mon"   aria-label="Dinner Mon"></div>
+      <div class="mg-cell"><input type="checkbox" id="m-D-Tues"  aria-label="Dinner Tues"></div>
+      <div class="mg-cell"><input type="checkbox" id="m-D-Wed"   aria-label="Dinner Wed"></div>
+      <div class="mg-cell"><input type="checkbox" id="m-D-Thurs" aria-label="Dinner Thurs"></div>
+      <div class="mg-cell"><input type="checkbox" id="m-D-Fri"   aria-label="Dinner Fri"></div>
+    </div>
+  </div>
+
+  <div class="section-title" style="margin-top:16px;">Other Information</div>
+  <div class="fields">
+    <div class="field">
+      <label for="f-diet">Dietary Requirements</label>
+      <textarea id="f-diet" placeholder="e.g. vegetarian, gluten-free, nut allergy — leave blank if none"></textarea>
+    </div>
+    <div class="field">
+      <label for="f-tent">Own Tent / BTAC Tent?</label>
+      <div class="select-wrap">
+        <select id="f-tent">
+          <option value="">— please select —</option>
+          <option value="Own tent">Own tent</option>
+          <option value="BTAC tent">BTAC tent</option>
+          <option value="N/A">N/A</option>
+        </select>
+      </div>
+    </div>
+    <div class="field">
+      <label for="f-qual">Current Qualification</label>
+      <input type="text" id="f-qual" placeholder="e.g. First Aid, DofE, Scout Leader...">
+    </div>
+    <div class="field">
+      <label>Current DBS?</label>
+      <div class="radio-group">
+        <label><input type="radio" name="dbs" value="Yes"> Yes</label>
+        <label><input type="radio" name="dbs" value="No">  No</label>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="banner banner-success" id="banner-success">
+  <strong>Registration sent successfully!</strong>
+  Your details have been passed to the organiser. You do not need to do anything else.
+</div>
+
+<div class="banner banner-error" id="banner-error">
+  <strong>Something went wrong.</strong>
+  Your registration could not be sent. Please check your internet connection and try again. If the problem continues, contact the organiser directly at grippipefyn@gmail.com.
+</div>
+
+<div class="actions">
+  <button class="btn btn-submit" id="btn-submit" onclick="submitForm()">
+    Submit Registration
+  </button>
+  <p class="btn-hint">Works on all devices. Your details go straight to the organiser.</p>
+
+  <button class="btn btn-pdf" onclick="window.print()">
+    Print / Save as PDF
+  </button>
+  <p class="btn-hint">Use your browser or device print option to save a copy for yourself</p>
+</div>
+
+<script>
+  var DAYS       = ['Mon','Tues','Wed','Thurs','Fri'];
+  var DAY_LABELS = { Mon:'Monday', Tues:'Tuesday', Wed:'Wednesday', Thurs:'Thursday', Fri:'Friday' };
+  var MEALS      = { B:'Breakfast', L:'Lunch', D:'Dinner' };
+
+  function getData() {
+    var meals = {};
+    Object.keys(MEALS).forEach(function(m) {
+      meals[m] = DAYS.filter(function(d) {
+        var el = document.getElementById('m-' + m + '-' + d);
+        return el && el.checked;
+      }).map(function(d) { return DAY_LABELS[d]; });
+    });
+    var attending = DAYS.filter(function(d) {
+      var el = document.getElementById('a-' + d);
+      return el && el.checked;
+    }).map(function(d) { return DAY_LABELS[d]; });
+    var dbsEl = document.querySelector('input[name="dbs"]:checked');
+    return {
+      'Full Name':             (document.getElementById('f-name').value || '').trim() || '(not provided)',
+      'Days Attending':        attending.length ? attending.join(', ') : 'none selected',
+      'Breakfast':             meals.B.length   ? meals.B.join(', ')   : 'none',
+      'Lunch':                 meals.L.length   ? meals.L.join(', ')   : 'none',
+      'Dinner':                meals.D.length   ? meals.D.join(', ')   : 'none',
+      'Dietary Requirements':  (document.getElementById('f-diet').value || '').trim() || 'None',
+      'Tent':                  document.getElementById('f-tent').value  || '(not selected)',
+      'Current Qualification': (document.getElementById('f-qual').value || '').trim() || '(not provided)',
+      'Current DBS':           dbsEl ? dbsEl.value : '(not answered)'
+    };
+  }
+
+  function showBanner(type) {
+    document.getElementById('banner-success').style.display = 'none';
+    document.getElementById('banner-error').style.display   = 'none';
+    var el = document.getElementById('banner-' + type);
+    el.style.display = 'block';
+    el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+
+  function submitForm() {
+    var data = getData();
+    var btn  = document.getElementById('btn-submit');
+
+    if (!data['Full Name'] || data['Full Name'] === '(not provided)') {
+      alert('Please enter your full name before submitting.');
+      return;
+    }
+
+    btn.disabled    = true;
+    btn.textContent = 'Sending...';
+
+    fetch('https://forminit.com/f/p3cvklejofm', {
+      method:  'POST',
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body:    JSON.stringify(data)
+    })
+    .then(function(res) {
+      if (res.ok) {
+        showBanner('success');
+        btn.textContent      = 'Submitted';
+        btn.style.background = '#888';
+      } else {
+        throw new Error('Non-OK response');
+      }
+    })
+    .catch(function() {
+      showBanner('error');
+      btn.disabled    = false;
+      btn.textContent = 'Submit Registration';
+    });
+  }
+</script>
+
+</body>
+</html>
