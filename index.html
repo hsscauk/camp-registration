@@ -5,6 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="robots" content="noindex, nofollow">
 <title>Camp Registration Form</title>
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<script>emailjs.init('fPDXj2sAz5t02sAjy');</script>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@400;600&family=Source+Sans+3:wght@300;400;600&display=swap');
   :root {
@@ -24,7 +26,7 @@
     background: var(--bg);
     color: var(--ink);
     min-height: 100vh;
-    padding: 0 0 48px 0;
+    padding-bottom: 48px;
   }
   .page-header {
     background: var(--accent);
@@ -158,7 +160,6 @@
   .actions {
     max-width: 640px;
     margin: 18px auto 0;
-    padding: 0 0;
     display: flex;
     flex-direction: column;
     gap: 12px;
@@ -387,15 +388,15 @@
     }).map(function(d) { return DAY_LABELS[d]; });
     var dbsEl = document.querySelector('input[name="dbs"]:checked');
     return {
-      'Full Name':             (document.getElementById('f-name').value || '').trim() || '(not provided)',
-      'Days Attending':        attending.length ? attending.join(', ') : 'none selected',
-      'Breakfast':             meals.B.length   ? meals.B.join(', ')   : 'none',
-      'Lunch':                 meals.L.length   ? meals.L.join(', ')   : 'none',
-      'Dinner':                meals.D.length   ? meals.D.join(', ')   : 'none',
-      'Dietary Requirements':  (document.getElementById('f-diet').value || '').trim() || 'None',
-      'Tent':                  document.getElementById('f-tent').value  || '(not selected)',
-      'Current Qualification': (document.getElementById('f-qual').value || '').trim() || '(not provided)',
-      'Current DBS':           dbsEl ? dbsEl.value : '(not answered)'
+      from_name:       (document.getElementById('f-name').value || '').trim() || '(not provided)',
+      days_attending:  attending.length ? attending.join(', ') : 'none selected',
+      breakfast:       meals.B.length   ? meals.B.join(', ')   : 'none',
+      lunch:           meals.L.length   ? meals.L.join(', ')   : 'none',
+      dinner:          meals.D.length   ? meals.D.join(', ')   : 'none',
+      dietary:         (document.getElementById('f-diet').value || '').trim() || 'None',
+      tent:            document.getElementById('f-tent').value  || '(not selected)',
+      qualification:   (document.getElementById('f-qual').value || '').trim() || '(not provided)',
+      dbs:             dbsEl ? dbsEl.value : '(not answered)'
     };
   }
 
@@ -411,7 +412,7 @@
     var data = getData();
     var btn  = document.getElementById('btn-submit');
 
-    if (!data['Full Name'] || data['Full Name'] === '(not provided)') {
+    if (!data.from_name || data.from_name === '(not provided)') {
       alert('Please enter your full name before submitting.');
       return;
     }
@@ -419,25 +420,18 @@
     btn.disabled    = true;
     btn.textContent = 'Sending...';
 
-    fetch('https://forminit.com/f/p3cvklejofm', {
-      method:  'POST',
-      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-      body:    JSON.stringify(data)
-    })
-    .then(function(res) {
-      if (res.ok) {
+    emailjs.send('service_k4c78is', 'template_8mkv7os', data)
+      .then(function() {
         showBanner('success');
         btn.textContent      = 'Submitted';
         btn.style.background = '#888';
-      } else {
-        throw new Error('Non-OK response');
-      }
-    })
-    .catch(function() {
-      showBanner('error');
-      btn.disabled    = false;
-      btn.textContent = 'Submit Registration';
-    });
+      })
+      .catch(function(err) {
+        console.error('EmailJS error:', err);
+        showBanner('error');
+        btn.disabled    = false;
+        btn.textContent = 'Submit Registration';
+      });
   }
 </script>
 
